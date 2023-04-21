@@ -1,0 +1,9 @@
+@import "@/styles/vars.scss";
+
+.span {
+  font-family: $fontFamily;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: $warning;
+}

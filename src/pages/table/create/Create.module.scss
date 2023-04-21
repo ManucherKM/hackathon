@@ -1,0 +1,101 @@
+@import "@/styles/vars.scss";
+
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+
+  .wrapper_title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+
+  .wrapper_loader {
+    width: 400px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .form_wrapper {
+    width: 350px;
+  }
+
+  .wrapper_button {
+    margin-top: 10px;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .wrapper_preiod {
+    display: flex;
+    gap: 20px;
+  }
+
+  .wrapper_items_holidays {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .wrapper_work_days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .wrapper_subtitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .subtitle {
+    color: $background250;
+  }
+
+  .wrapper_input_file {
+    box-sizing: border-box;
+    background: $background500;
+    border-radius: 12px;
+    padding: 20px;
+    outline: none;
+    font-family: $fontFamily;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: $background250;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid transparent;
+    width: 100%;
+    position: relative;
+
+    span {
+      font-size: 16px;
+    }
+
+    &.active {
+      border: 1px solid $domiant1;
+
+      span {
+        color: $domiant1;
+      }
+    }
+  }
+}

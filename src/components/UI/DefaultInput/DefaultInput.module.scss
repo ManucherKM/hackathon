@@ -1,0 +1,35 @@
+@import "@/styles/vars.scss";
+
+.input {
+  box-sizing: border-box;
+  background: $background500;
+  border-radius: 12px;
+  padding: 20px;
+  outline: none;
+  font-family: $fontFamily;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: $background250;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid transparent;
+  width: 100%;
+  position: relative;
+
+  &:focus {
+    border: 1px solid $domiant1;
+  }
+
+  &[type="file"] {
+    content: "";
+    width: 0.1px;
+    height: 0.1px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    opacity: 0.01;
+  }
+}

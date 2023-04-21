@@ -1,0 +1,30 @@
+@import "@/styles/vars.scss";
+
+.item {
+  font-family: $fontFamily;
+  font-style: normal;
+  width: 110px;
+  font-weight: 400;
+  font-size: 14px;
+  color: $background250;
+  border-radius: 12px;
+  padding: 20px 10px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3;
+
+  &:hover {
+    transition: all 0.3;
+    background-color: $domiant1;
+    color: black;
+  }
+
+  &.active {
+    transition: all 0.3;
+    background-color: $domiant1;
+    color: black;
+  }
+}

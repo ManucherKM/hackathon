@@ -1,0 +1,24 @@
+@import "@/styles/vars.scss";
+
+.item {
+  background: $domiant1;
+  border-radius: 12px;
+  width: 100px;
+  height: 34px;
+  font-family: $fontFamily;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: black;
+  padding: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3;
+
+  &:hover {
+    transition: all 0.3;
+    opacity: 0.8;
+  }
+}

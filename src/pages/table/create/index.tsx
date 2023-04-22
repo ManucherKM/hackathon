@@ -147,10 +147,8 @@ const Create: FC<ICreate> = () => {
     formData.append("lessonsPerWeek", target.lessonsPerWeek);
     formData.append("stage", target.stage);
     formData.append("token", JSON.stringify(target.token));
-    formData.append("file", JSON.stringify(target.file));
+    formData.append("file", target.file as Blob, "token");
     formData.append("table", JSON.stringify(target.table));
-
-    console.log(formData);
 
     const tables = await createTable(formData);
 
@@ -355,7 +353,7 @@ const Create: FC<ICreate> = () => {
               onChange={(e) => {
                 setFile(e.target.files && e.target.files[0]);
               }}
-              accept=""
+              accept="xslx"
               type="file"
             />
           </label>

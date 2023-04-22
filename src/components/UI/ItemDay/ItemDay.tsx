@@ -1,4 +1,4 @@
-import { FC, useState, HTMLAttributes } from "react";
+import { FC, useState, HTMLAttributes, useEffect } from "react";
 import classes from "./ItemDay.module.scss";
 import { clsx } from "clsx";
 
@@ -12,6 +12,9 @@ const ItemDay: FC<IItemDay> = ({ setActive, isActive, ...props }) => {
     clsx(classes.item, isActive && classes.active)
   );
 
+  useEffect(() => {
+    setStyles(clsx(classes.item, isActive && classes.active));
+  }, [isActive]);
   return (
     <div
       onClick={() => {

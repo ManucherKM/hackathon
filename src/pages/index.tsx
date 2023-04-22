@@ -6,8 +6,9 @@ import { MouseEvent, useState, FC, useEffect } from "react";
 import Title from "../components/UI/Title/Title";
 import Modal from "../components/UI/Modal/Modal";
 import Loader from "../components/UI/Loader/Loader";
-import { checkAuth } from "../utils/checkAuth";
 import { useRouter } from "next/navigation";
+import { useStore } from "@/store";
+import { addAuth } from "@/utils/addAuth";
 
 interface ILogin {}
 
@@ -17,6 +18,9 @@ interface IForm {
 }
 
 const Login: FC<ILogin> = () => {
+  const createUser = useStore((state) => state.createUser);
+  const user = useStore((state) => state.user);
+
   const [loading, setLoading] = useState<boolean>(true);
 
   const [form, setForm] = useState<IForm>({
@@ -26,7 +30,7 @@ const Login: FC<ILogin> = () => {
 
   const [error, setError] = useState<boolean>(false);
 
-  const submitHandler = (e: MouseEvent<HTMLButtonElement>) => {
+  const submitHandler = async (e: MouseEvent<HTMLButtonElement>) => {
     setLoading(true);
     e.preventDefault();
 
@@ -38,16 +42,25 @@ const Login: FC<ILogin> = () => {
       return;
     }
 
-    console.log(form);
+    const user = await createUser(userName, password);
 
-    //  Отправляю форму на бэк
+    if (!user) {
+      console.log("Не удалось получить пользователя");
+      setError(true);
+      setLoading(false);
+      return;
+    }
+
+    addAuth(user);
+
     setLoading(false);
   };
 
   const router = useRouter();
 
   useEffect(() => {
-    const auth = checkAuth();
+
+    const auth = !!user.token;
 
     if (!auth) {
       setLoading(false);
@@ -57,7 +70,7 @@ const Login: FC<ILogin> = () => {
     router.push("/table/tables");
 
     setLoading(false);
-  }, []);
+  }, [user]);
   return (
     <div className={classes.login}>
       {loading && (

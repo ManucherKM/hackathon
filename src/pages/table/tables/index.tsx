@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
-import { checkAuth } from "../../../utils/checkAuth";
 import { useRouter } from "next/router";
 import classes from "./Tables.module.scss";
 import Title from "../../../components/UI/Title/Title";
+import { useStore } from "@/store";
 
 const tables = () => {
+  const user = useStore((state) => state.user);
+
   const router = useRouter();
 
   const [tables, setTables] = useState([]);
 
   useEffect(() => {
-    const auth = checkAuth();
+    const auth = !!user.token;
 
     if (auth) return;
 
     router.push("/");
-  }, []);
+  }, [user]);
   return (
     <div className={classes.wrapper}>
       {!tables.length && (

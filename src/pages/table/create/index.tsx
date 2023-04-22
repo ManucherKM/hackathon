@@ -1,6 +1,5 @@
 import { FC, useEffect, useState, MouseEvent } from "react";
 import { useRouter } from "next/navigation";
-import { checkAuth } from "../../../utils/checkAuth";
 import classes from "./Create.module.scss";
 import Modal from "../../../components/UI/Modal/Modal";
 import Loader from "../../../components/UI/Loader/Loader";
@@ -13,10 +12,12 @@ import ItemHoliday from "../../../components/UI/ItemHoliday/ItemHoliday";
 import ItemDay from "../../../components/UI/ItemDay/ItemDay";
 import AnotherButton from "../../../components/UI/AnotherButton/AnotherButton";
 import clsx from "clsx";
+import { useStore } from "@/store";
+import { addAuth } from "@/utils/addAuth";
 
 interface ICreate {}
 
-interface IForm {
+export interface IForm {
   startDate: string;
   endDate: string;
   hoursPerWeek: string;
@@ -30,39 +31,45 @@ interface IDay {
   isActive: boolean;
 }
 
+const initialDays = [
+  {
+    value: "Понедельник",
+    isActive: true,
+  },
+  {
+    value: "Вторник",
+    isActive: false,
+  },
+  {
+    value: "Среда",
+    isActive: false,
+  },
+  {
+    value: "Четверг",
+    isActive: false,
+  },
+  {
+    value: "Пятница",
+    isActive: false,
+  },
+  {
+    value: "Суббота",
+    isActive: false,
+  },
+  {
+    value: "Воскресенье",
+    isActive: false,
+  },
+];
+
 const Create: FC<ICreate> = () => {
+  const user = useStore((state) => state.user);
+
+  const createTable = useStore((state) => state.createTable);
+
   const [file, setFile] = useState<File | null>(null);
 
-  const [days, setDays] = useState<IDay[]>([
-    {
-      value: "Понедельник",
-      isActive: true,
-    },
-    {
-      value: "Вторник",
-      isActive: false,
-    },
-    {
-      value: "Среда",
-      isActive: false,
-    },
-    {
-      value: "Четверг",
-      isActive: false,
-    },
-    {
-      value: "Пятница",
-      isActive: false,
-    },
-    {
-      value: "Суббота",
-      isActive: false,
-    },
-    {
-      value: "Воскресенье",
-      isActive: false,
-    },
-  ]);
+  const [days, setDays] = useState<IDay[]>(initialDays);
 
   const [holidaysActive, setHolidaysActive] = useState<boolean>(false);
 
@@ -81,7 +88,7 @@ const Create: FC<ICreate> = () => {
     table: "",
   });
 
-  const submitHandler = (e: MouseEvent<HTMLButtonElement>) => {
+  const submitHandler = async (e: MouseEvent<HTMLButtonElement>) => {
     setLoading(true);
     e.preventDefault();
 
@@ -109,16 +116,31 @@ const Create: FC<ICreate> = () => {
       return;
     }
 
-    console.log(form);
+    const tables = await createTable({
+      startDate,
+      endDate,
+      hoursPerWeek,
+      holidays,
+      lessonsPerWeek,
+      table,
+    });
 
-    //  Отправка формы на бэк
+    if (!tables) {
+      console.log("Не удалось получить таблицу");
+      setError(true);
+      setLoading(false);
+      return;
+    }
+
+    addAuth(user);
+
     setLoading(false);
   };
 
   const router = useRouter();
 
   useEffect(() => {
-    const auth = checkAuth();
+    const auth = !!user.token;
 
     if (auth) {
       setLoading(false);
@@ -127,7 +149,7 @@ const Create: FC<ICreate> = () => {
 
     router.push("/");
     setLoading(false);
-  }, []);
+  }, [user]);
 
   return (
     <div className={classes.wrapper}>
@@ -145,6 +167,7 @@ const Create: FC<ICreate> = () => {
         </div>
         <form className={classes.form}>
           <DefaultInput
+            required
             value={form.hoursPerWeek}
             onChange={(e) => {
               setForm({
@@ -156,6 +179,7 @@ const Create: FC<ICreate> = () => {
           />
 
           <DefaultInput
+            required
             value={form.lessonsPerWeek}
             onChange={(e) => {
               setForm({
@@ -168,14 +192,17 @@ const Create: FC<ICreate> = () => {
 
           <div className={classes.wrapper_preiod}>
             <DefaultInput
+              required
               value={form.startDate}
               onChange={(e) => {
                 setForm({ ...form, startDate: e.target.value });
+                console.log(e.target.value);
               }}
               type="date"
             />
 
             <DefaultInput
+              required
               value={form.endDate}
               onChange={(e) => {
                 setForm({ ...form, endDate: e.target.value });
@@ -205,6 +232,7 @@ const Create: FC<ICreate> = () => {
           )}
 
           <DefaultInput
+            required
             type={holidaysActive ? "date" : "text"}
             value={holidaysValue}
             onChange={(e) => {
@@ -226,7 +254,6 @@ const Create: FC<ICreate> = () => {
             }}
           />
 
-          {/* Надо поправить */}
           <div className={classes.wrapper_work_days}>
             {days.map((day) => (
               <ItemDay
@@ -257,9 +284,9 @@ const Create: FC<ICreate> = () => {
           >
             <span>Загрузить таблицу</span>
             <DefaultInput
+              required
               onChange={(e) => {
                 setFile(e.target.files && e.target.files[0]);
-                console.log(e.target.files && e.target.files[0]);
               }}
               type="file"
             />
@@ -273,6 +300,7 @@ const Create: FC<ICreate> = () => {
             onClick={() => {
               router.push("/table/online");
             }}
+            type="button"
           >
             Создайте таблицу
           </AnotherButton>

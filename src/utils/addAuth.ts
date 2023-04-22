@@ -1,3 +1,3 @@
-export function addAuth(auth: string): void {
-  localStorage.setItem("auth", auth);
+export function addAuth<T>(user: T): void {
+  localStorage.setItem("user", JSON.stringify(user));
 }

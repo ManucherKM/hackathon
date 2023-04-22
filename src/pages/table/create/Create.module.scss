@@ -85,10 +85,17 @@
     border: 1px solid transparent;
     width: 100%;
     position: relative;
+    cursor: pointer;
 
-    span {
-      font-size: 16px;
+    &:hover, &:focus {
+      border: 1px solid $domiant1;
+
+      span {
+        color: $domiant1;
+      }
     }
+
+   
 
     &.active {
       border: 1px solid $domiant1;

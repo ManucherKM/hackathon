@@ -74,18 +74,16 @@ export const useStore = create<IState>((set) => ({
       password,
     };
 
-    const { data } = await axios.post<IResultApi>("/login", params);
+    const { data } = await axios.post<string>("/login", params);
 
     if (!data) {
       console.log("Не удалось получить пользователя");
       return false;
     }
 
-    const { token } = data;
-
     const target: IUser = {
       tables: [],
-      token,
+      token: data,
     };
 
     set(() => ({ user: target }));

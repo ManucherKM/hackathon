@@ -24,30 +24,21 @@
   }
 
   .table {
-    font-family: $fontFamily;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    color: $domiant1;
+    display: flex;
 
-    .chunk {
-      font-style: inherit;
-      font-weight: inherit;
-      font-size: inherit;
-      font-family: $fontFamily;
-      color: $background250;
-
-      &:active {
-        border: 1px solid $domiant1;
-        color: $domiant1;
-      }
+    .table_nums {
+      width: 10%;
+      min-width: 30px;
     }
 
-    .header {
-      font-style: inherit;
-      font-weight: inherit;
-      font-size: inherit;
-      font-family: $fontFamily;
+    .table_names {
+      width: 70%;
+      min-width: 700px;
+    }
+
+    .table_hours {
+      width: 20%;
+      min-width: 100px;
     }
   }
 }

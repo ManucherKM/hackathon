@@ -65,11 +65,14 @@ const initialDays = [
 const Create: FC<ICreate> = () => {
   const user = useStore((state) => state.user);
 
+  const savedForm: IForm | null = useStore((state) => state.form);
+  const setSavedForm = useStore((state) => state.setForm);
+
   const createTable = useStore((state) => state.createTable);
 
-  const [file, setFile] = useState<File | null>(null);
-
   const [days, setDays] = useState<IDay[]>(initialDays);
+
+  const [file, setFile] = useState<File | null>(null);
 
   const [holidaysActive, setHolidaysActive] = useState<boolean>(false);
 
@@ -79,14 +82,16 @@ const Create: FC<ICreate> = () => {
 
   const [error, setError] = useState<boolean>(false);
 
-  const [form, setForm] = useState<IForm>({
-    startDate: "",
-    endDate: "",
-    hoursPerWeek: "",
-    holidays: [],
-    lessonsPerWeek: "",
-    table: "",
-  });
+  const [form, setForm] = useState<IForm>(
+    savedForm || {
+      startDate: "",
+      endDate: "",
+      hoursPerWeek: "",
+      holidays: [],
+      lessonsPerWeek: "",
+      table: "",
+    }
+  );
 
   const submitHandler = async (e: MouseEvent<HTMLButtonElement>) => {
     setLoading(true);
@@ -134,8 +139,21 @@ const Create: FC<ICreate> = () => {
 
     addAuth(user);
 
+    setForm({
+      startDate: "",
+      endDate: "",
+      hoursPerWeek: "",
+      holidays: [],
+      lessonsPerWeek: "",
+      table: "",
+    });
+
     setLoading(false);
   };
+
+  function saveForm() {
+    setSavedForm(form);
+  }
 
   const router = useRouter();
 
@@ -288,11 +306,8 @@ const Create: FC<ICreate> = () => {
               onChange={(e) => {
                 setFile(e.target.files && e.target.files[0]);
               }}
-
               accept=""
               type="file"
-            
-              
             />
           </label>
 
@@ -303,6 +318,7 @@ const Create: FC<ICreate> = () => {
           <AnotherButton
             onClick={() => {
               router.push("/table/online");
+              saveForm();
             }}
             type="button"
           >

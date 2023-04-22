@@ -42,9 +42,9 @@ const Login: FC<ILogin> = () => {
       return;
     }
 
-    const user = await createUser(userName, password);
+    const localUser = await createUser(userName, password);
 
-    if (!user) {
+    if (!localUser) {
       console.log("Не удалось получить пользователя");
       setError(true);
       setLoading(false);
@@ -59,7 +59,6 @@ const Login: FC<ILogin> = () => {
   const router = useRouter();
 
   useEffect(() => {
-
     const auth = !!user.token;
 
     if (!auth) {

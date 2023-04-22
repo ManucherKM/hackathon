@@ -4,13 +4,50 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
   padding-left: 20px;
   padding-right: 20px;
 
   .wrapper_title {
+    margin-top: 57px;
+    margin-bottom: 20px;
+  }
 
-    
+  .wrapper_bottom {
+    button {
+      padding-left: 20px;
+      padding-right: 20px;
+      margin-top: 30px;
+    }
+  }
+
+  .table {
+    font-family: $fontFamily;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: $domiant1;
+
+    .chunk {
+      font-style: inherit;
+      font-weight: inherit;
+      font-size: inherit;
+      font-family: $fontFamily;
+      color: $background250;
+
+      &:active {
+        border: 1px solid $domiant1;
+        color: $domiant1;
+      }
+    }
+
+    .header {
+      font-style: inherit;
+      font-weight: inherit;
+      font-size: inherit;
+      font-family: $fontFamily;
+    }
   }
 }

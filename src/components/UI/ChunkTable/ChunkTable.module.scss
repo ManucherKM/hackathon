@@ -1,0 +1,32 @@
+@import "@/styles/vars.scss";
+
+.input {
+  width: 100%;
+  font-family: $fontFamily;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: $background250;
+  border: 1px solid $background500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  outline: none;
+  background: transparent;
+
+  &:hover {
+    border: 1px solid $background500;
+  }
+
+  &:focus {
+    border: 1px solid $background500;
+  }
+
+  &:disabled {
+    color: $domiant1;
+    border: 1px solid $domiant1;
+    text-align: center;
+    cursor: text;
+  }
+}

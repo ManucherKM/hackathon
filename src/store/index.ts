@@ -11,6 +11,8 @@ export interface IUser {
 
 interface IState {
   user: IUser;
+  form: IFormTable | null;
+  setForm: (target: IFormTable) => void;
   setUser: (target: IUser) => void;
   setTable: (table: ITable[]) => void;
   logout: () => void;
@@ -40,9 +42,21 @@ if (typeof localStorage !== "undefined") {
 
 export const useStore = create<IState>((set) => ({
   user: user,
+  form: {
+    startDate: "",
+    endDate: "",
+    hoursPerWeek: "",
+    holidays: [],
+    lessonsPerWeek: "",
+    table: "",
+  },
 
   setUser(target: IUser) {
     set(() => ({ user: target }));
+  },
+
+  setForm(target: IFormTable) {
+    set(() => ({ form: target }));
   },
 
   setTable(target: ITable[]) {
@@ -56,21 +70,21 @@ export const useStore = create<IState>((set) => ({
 
   async createUser(userName, password) {
     const params = {
-      userName,
+      login: userName,
       password,
     };
 
-    const { data } = await axios.post<IResultApi>("/user", params);
+    const { data } = await axios.post<IResultApi>("/login", params);
 
     if (!data) {
       console.log("Не удалось получить пользователя");
       return false;
     }
 
-    const { tables, token } = data;
+    const { token } = data;
 
     const target: IUser = {
-      tables,
+      tables: [],
       token,
     };
 

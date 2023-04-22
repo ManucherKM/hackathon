@@ -7,6 +7,37 @@
   font-family: $fontFamily;
 }
 
+/* для вертикального скроллбара */
+::-webkit-scrollbar {
+  width: 4px; /* ширина скроллбара */
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent; /* цвет фона трека скроллбара */
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $domiant1; /* цвет ползунка скроллбара */
+  border-radius: 9999px;
+
+}
+
+/* для горизонтального скроллбара */
+::-webkit-scrollbar-horizontal {
+  height: 4px; /* высота скроллбара */
+}
+
+::-webkit-scrollbar-horizontal-track {
+  background-color: transparent; /* цвет фона трека скроллбара */
+}
+
+::-webkit-scrollbar-horizontal-thumb {
+  background-color: $domiant1; /* цвет ползунка скроллбара */
+}
+
 body {
   background: $background1000;
+  scrollbar-color: $domiant1;
 }

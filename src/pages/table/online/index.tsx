@@ -59,15 +59,32 @@ const Tables = () => {
   const [tables, setTables] = useState([colNum, colName, colTime]);
 
   function addRow() {
-    const newChunk: IChunk = {
-      isHeader: false,
-      value: "",
-      id: getUniqueKey() + Date.now(),
-    };
+    setColNum((prev) => [
+      ...prev,
+      {
+        isHeader: false,
+        value: "",
+        id: getUniqueKey(),
+      },
+    ]);
 
-    setColNum((prev) => [...prev, newChunk]);
-    setColName((prev) => [...prev, newChunk]);
-    setColTime((prev) => [...prev, newChunk]);
+    setColName((prev) => [
+      ...prev,
+      {
+        isHeader: false,
+        value: "",
+        id: getUniqueKey(),
+      },
+    ]);
+
+    setColTime((prev) => [
+      ...prev,
+      {
+        isHeader: false,
+        value: "",
+        id: getUniqueKey(),
+      },
+    ]);
   }
 
   const router = useRouter();

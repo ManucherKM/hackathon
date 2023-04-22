@@ -51,7 +51,7 @@ const Login: FC<ILogin> = () => {
       return;
     }
 
-    addAuth({ ...user, token: localUser });
+    addAuth(user);
 
     setLoading(false);
   };

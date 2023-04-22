@@ -56,6 +56,8 @@ const Tables = () => {
   const [colName, setColName] = useState<IChunk[]>(columName);
   const [colTime, setColTime] = useState<IChunk[]>(columnTime);
 
+  const setSendTables = useStore((state) => state.setTable);
+
   const [tables, setTables] = useState([colNum, colName, colTime]);
 
   function addRow() {
@@ -85,6 +87,10 @@ const Tables = () => {
         id: getUniqueKey(),
       },
     ]);
+  }
+
+  function saveTable() {
+    setSendTables(tables);
   }
 
   const router = useRouter();
@@ -188,10 +194,36 @@ const Tables = () => {
         <AnotherButton onClick={addRow}>Добавить</AnotherButton>
       </div>
       <div className={classes.wrapper_bottom}>
-        <DomiantButton>Подтвердить</DomiantButton>
+        <DomiantButton onClick={saveTable}>Подтвердить</DomiantButton>
       </div>
     </div>
   );
 };
 
 export default Tables;
+
+const o = {
+  lessons: {
+    1: {
+      name: "Вводное занятие. Техника безопасности. Что такое программирование",
+      hours: 1,
+    },
+    2: { name: "Начало работы со Scratch", hours: 1 },
+    3: { name: "Начинаем работать с программой. Блок «Движение» ", hours: 2 },
+    4: { name: "Что такое алгоритм?", hours: 3 },
+    5: { name: "Блок «События»", hours: 1 },
+    6: {
+      name: "Работа с объектами. Простые циклы. Блок «Внешность»",
+      hours: 8,
+    },
+    7: { name: "Создание нового спрайта", hours: 4 },
+    8: { name: "Вложенные циклы", hours: 3 },
+    9: { name: "Переменные. Блок «Данные»", hours: 3 },
+    10: { name: "Вычисления. Блок «Операторы»", hours: 3 },
+    11: { name: "Строки и списки. Блок «Сенсоры»", hours: 4 },
+    12: { name: "Обмен сообщениями", hours: 4 },
+    13: { name: "Координаты", hours: 4 },
+    14: { name: "Итоговое тестирование", hours: 1 },
+  },
+  all_hours: 42,
+};

@@ -24,7 +24,10 @@
   }
 
   .table {
+    width: 100%;
     display: flex;
+    justify-content: center;
+    align-items: center;
 
     .table_nums {
       width: 10%;
@@ -39,6 +42,17 @@
     .table_hours {
       width: 20%;
       min-width: 100px;
+    }
+  }
+
+  .wrapper_btn_add {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    button {
+      width: fit-content;
     }
   }
 }

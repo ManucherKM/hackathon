@@ -1,3 +1,6 @@
+import { v4 } from "uuid";
+
 export function getUniqueKey() {
-  return (Math.random() + Date.now() + Math.random()).toString;
+  const key = v4();
+  return key;
 }

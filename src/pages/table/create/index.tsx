@@ -24,6 +24,7 @@ export interface IForm {
   holidays: string[];
   lessonsPerWeek: string;
   table: unknown;
+  stage: string;
 }
 
 interface IDay {
@@ -65,7 +66,10 @@ const initialDays = [
 const Create: FC<ICreate> = () => {
   const user = useStore((state) => state.user);
 
+  const formasd = useStore((state) => state.form);
+
   const savedForm: IForm | null = useStore((state) => state.form);
+
   const setSavedForm = useStore((state) => state.setForm);
 
   const createTable = useStore((state) => state.createTable);
@@ -90,6 +94,7 @@ const Create: FC<ICreate> = () => {
       holidays: [],
       lessonsPerWeek: "",
       table: "",
+      stage: "",
     }
   );
 
@@ -104,6 +109,7 @@ const Create: FC<ICreate> = () => {
       holidays,
       lessonsPerWeek,
       table,
+      stage,
     } = form;
 
     const isEmpty =
@@ -113,6 +119,7 @@ const Create: FC<ICreate> = () => {
       !holidays ||
       !lessonsPerWeek ||
       !table ||
+      !stage ||
       !file;
 
     if (isEmpty) {
@@ -128,6 +135,7 @@ const Create: FC<ICreate> = () => {
       holidays,
       lessonsPerWeek,
       table,
+      stage,
     });
 
     if (!tables) {
@@ -146,6 +154,7 @@ const Create: FC<ICreate> = () => {
       holidays: [],
       lessonsPerWeek: "",
       table: "",
+      stage: "",
     });
 
     setLoading(false);
@@ -158,12 +167,15 @@ const Create: FC<ICreate> = () => {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(user, formasd);
+
     const auth = !!user.token;
 
     if (auth) {
       setLoading(false);
       return;
     }
+
 
     router.push("/");
     setLoading(false);
@@ -198,6 +210,18 @@ const Create: FC<ICreate> = () => {
 
           <DefaultInput
             required
+            value={form.stage}
+            onChange={(e) => {
+              setForm({
+                ...form,
+                stage: e.target.value,
+              });
+            }}
+            placeholder="Курс"
+          />
+
+          <DefaultInput
+            required
             value={form.lessonsPerWeek}
             onChange={(e) => {
               setForm({
@@ -214,7 +238,6 @@ const Create: FC<ICreate> = () => {
               value={form.startDate}
               onChange={(e) => {
                 setForm({ ...form, startDate: e.target.value });
-                console.log(e.target.value);
               }}
               type="date"
             />

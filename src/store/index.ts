@@ -2,11 +2,11 @@ import { clearAuth } from "@/utils/clearAuth";
 import { create } from "zustand";
 import axios from "../axios";
 import { IForm as IFormTable } from "../pages/table/create";
-interface ITable {}
+import { IChunk } from "@/pages/table/online";
 
 export interface IUser {
   token: string | null;
-  tables: ITable[] | null;
+  tables: IChunk[][] | null;
 }
 
 interface IState {
@@ -14,7 +14,7 @@ interface IState {
   form: IFormTable | null;
   setForm: (target: IFormTable) => void;
   setUser: (target: IUser) => void;
-  setTable: (table: ITable[]) => void;
+  setTable: (table: IChunk[][]) => void;
   logout: () => void;
   createUser: (userName: string, password: string) => Promise<boolean>;
   createTable: (table: IFormTable) => Promise<boolean>;
@@ -22,7 +22,7 @@ interface IState {
 
 interface IResultApi {
   token: string;
-  tables: ITable[];
+  tables: IChunk[];
 }
 
 const defaultStore = {
@@ -49,6 +49,7 @@ export const useStore = create<IState>((set) => ({
     holidays: [],
     lessonsPerWeek: "",
     table: "",
+    stage: "",
   },
 
   setUser(target: IUser) {
@@ -59,7 +60,7 @@ export const useStore = create<IState>((set) => ({
     set(() => ({ form: target }));
   },
 
-  setTable(target: ITable[]) {
+  setTable(target: IChunk[][]) {
     set(({ user }) => ({
       user: {
         ...user,

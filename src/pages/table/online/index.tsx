@@ -9,7 +9,7 @@ import ChunkTable from "@/components/UI/ChunkTable/ChunkTable";
 import { getUniqueKey } from "@/utils/getUniqueKey";
 import AnotherButton from "@/components/UI/AnotherButton/AnotherButton";
 
-interface IChunk {
+export interface IChunk {
   id: string;
   value: string;
   isHeader: boolean;
@@ -50,6 +50,8 @@ function initialCounter() {
 const Tables = () => {
   const user = useStore((state) => state.user);
 
+  const formasd = useStore((state) => state.form);
+
   const getCount = initialCounter();
 
   const [colNum, setColNum] = useState<IChunk[]>(columnNumber);
@@ -89,14 +91,22 @@ const Tables = () => {
     ]);
   }
 
+  const router = useRouter();
+
   function saveTable() {
     setSendTables(tables);
+    router.push("/table/create");
   }
-
-  const router = useRouter();
 
   useEffect(() => {
     const auth = !!user.token;
+    console.log(formasd);
+
+    if (user.tables?.length !== 0 && user.tables) {
+      setColNum(user.tables[0]);
+      setColName(user.tables[1]);
+      setColTime(user.tables[2]);
+    }
 
     if (auth) return;
 
@@ -156,7 +166,6 @@ const Tables = () => {
                 tabIndex={getCount()}
                 onChange={(e) => {
                   const newTable = [...colName];
-                  console.log(colName);
 
                   newTable[chunkIdx].value = e.target.value;
 
@@ -178,7 +187,6 @@ const Tables = () => {
                 tabIndex={getCount()}
                 onChange={(e) => {
                   const newTable = [...colTime];
-                  console.log(colTime);
 
                   newTable[chunkIdx].value = e.target.value;
 

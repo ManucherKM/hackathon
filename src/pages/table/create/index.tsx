@@ -288,7 +288,11 @@ const Create: FC<ICreate> = () => {
               onChange={(e) => {
                 setFile(e.target.files && e.target.files[0]);
               }}
+
+              accept=""
               type="file"
+            
+              
             />
           </label>
 

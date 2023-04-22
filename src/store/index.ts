@@ -1,18 +1,16 @@
-import { IForm as IFormTable } from "@/pages/table/create";
 import { clearAuth } from "@/utils/clearAuth";
 import { create } from "zustand";
 import axios from "../axios";
+import { IForm as IFormTable } from "../pages/table/create";
+interface ITable {}
 
 export interface IUser {
   token: string | null;
-  tables: any | null;
+  tables: ITable[] | null;
 }
-
-interface ITable {}
 
 interface IState {
   user: IUser;
-  table: ITable[];
   setUser: (target: IUser) => void;
   setTable: (table: ITable[]) => void;
   logout: () => void;
@@ -22,34 +20,38 @@ interface IState {
 
 interface IResultApi {
   token: string;
-  tables: string;
+  tables: ITable[];
 }
 
-let defaultStore: IUser = {
+const defaultStore = {
   token: null,
   tables: null,
 };
 
-let store = defaultStore;
+let user = defaultStore;
 
 if (typeof localStorage !== "undefined") {
   const local = localStorage.getItem("user");
 
   if (local) {
-    store = JSON.parse(local);
+    user = JSON.parse(local);
   }
 }
 
 export const useStore = create<IState>((set) => ({
-  user: store,
-  table: [],
+  user: user,
 
   setUser(target: IUser) {
     set(() => ({ user: target }));
   },
 
-  setTable(table: ITable[]) {
-    set(() => ({ table: table }));
+  setTable(target: ITable[]) {
+    set(({ user }) => ({
+      user: {
+        ...user,
+        tables: target,
+      },
+    }));
   },
 
   async createUser(userName, password) {
@@ -67,7 +69,7 @@ export const useStore = create<IState>((set) => ({
 
     const { tables, token } = data;
 
-    const target = {
+    const target: IUser = {
       tables,
       token,
     };
@@ -95,13 +97,19 @@ export const useStore = create<IState>((set) => ({
       ...args,
     };
 
-    set(() => ({ table: target }));
+    set(({ user }) => ({
+      user: {
+        ...user,
+        tables: target,
+      },
+    }));
 
     return true;
   },
 
   logout() {
     set(() => ({ user: defaultStore }));
+
     clearAuth();
   },
 }));

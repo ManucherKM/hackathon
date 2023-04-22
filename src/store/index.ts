@@ -6,7 +6,7 @@ import { IChunk } from "@/pages/table/online";
 
 export interface IUser {
   token: string | null;
-  tables: IChunk[][] | null;
+  tables: IChunk[][] | File | null;
 }
 
 interface IState {
@@ -17,7 +17,7 @@ interface IState {
   setTable: (table: IChunk[][]) => void;
   logout: () => void;
   createUser: (userName: string, password: string) => Promise<boolean>;
-  createTable: (table: IFormTable) => Promise<boolean>;
+  createTable: (target: FormData) => Promise<boolean>;
 }
 
 interface IResultApi {
@@ -47,7 +47,9 @@ export const useStore = create<IState>((set) => ({
     endDate: "",
     hoursPerWeek: "",
     holidays: [],
+    workDays: [],
     lessonsPerWeek: "",
+    hoursPerWeekmax: "",
     table: "",
     stage: "",
   },
@@ -61,6 +63,8 @@ export const useStore = create<IState>((set) => ({
   },
 
   setTable(target: IChunk[][]) {
+    console.log(target);
+
     set(({ user }) => ({
       user: {
         ...user,
@@ -92,30 +96,13 @@ export const useStore = create<IState>((set) => ({
     return true;
   },
 
-  async createTable(table: IFormTable) {
-    const params = {
-      ...table,
-    };
-
-    const { data } = await axios.post("/table", params);
+  async createTable(t: FormData) {
+    const { data } = await axios.post("/setxlsx", t);
 
     if (!data) {
       console.log("Не удалось отправить форму с таблицей");
       return false;
     }
-
-    const { ...args } = data;
-
-    const target = {
-      ...args,
-    };
-
-    set(({ user }) => ({
-      user: {
-        ...user,
-        tables: target,
-      },
-    }));
 
     return true;
   },

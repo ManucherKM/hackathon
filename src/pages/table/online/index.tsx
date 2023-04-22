@@ -99,8 +99,10 @@ const Tables = () => {
   }
 
   useEffect(() => {
+
+    console.log(user.tables);
+    
     const auth = !!user.token;
-    console.log(formasd);
 
     if (user.tables?.length !== 0 && user.tables) {
       setColNum(user.tables[0]);

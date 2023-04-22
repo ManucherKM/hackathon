@@ -21,6 +21,7 @@ export interface IForm {
   startDate: string;
   endDate: string;
   hoursPerWeek: string;
+  hoursPerWeekmax: string;
   holidays: string[];
   lessonsPerWeek: string;
   table: unknown;
@@ -66,8 +67,6 @@ const initialDays = [
 const Create: FC<ICreate> = () => {
   const user = useStore((state) => state.user);
 
-  const formasd = useStore((state) => state.form);
-
   const savedForm: IForm | null = useStore((state) => state.form);
 
   const setSavedForm = useStore((state) => state.setForm);
@@ -93,6 +92,7 @@ const Create: FC<ICreate> = () => {
       hoursPerWeek: "",
       holidays: [],
       lessonsPerWeek: "",
+      hoursPerWeekmax: "",
       table: "",
       stage: "",
     }
@@ -118,9 +118,7 @@ const Create: FC<ICreate> = () => {
       !hoursPerWeek ||
       !holidays ||
       !lessonsPerWeek ||
-      !table ||
-      !stage ||
-      !file;
+      !stage;
 
     if (isEmpty) {
       setError(true);
@@ -128,15 +126,33 @@ const Create: FC<ICreate> = () => {
       return;
     }
 
-    const tables = await createTable({
-      startDate,
-      endDate,
-      hoursPerWeek,
-      holidays,
-      lessonsPerWeek,
-      table,
-      stage,
-    });
+    const target = {
+      startDate: form.startDate,
+      endDate: form.endDate,
+      hoursPerWeek: form.hoursPerWeek,
+      holidays: form.holidays,
+      lessonsPerWeek: form.lessonsPerWeek,
+      stage: form.stage,
+      token: user.token,
+      file,
+      table: user.tables,
+    };
+
+    const formData = new FormData();
+
+    formData.append("startDate", target.startDate);
+    formData.append("endDate", target.endDate);
+    formData.append("hoursPerWeek", target.hoursPerWeek);
+    formData.append("holidays", JSON.stringify(target.holidays));
+    formData.append("lessonsPerWeek", target.lessonsPerWeek);
+    formData.append("stage", target.stage);
+    formData.append("token", JSON.stringify(target.token));
+    formData.append("file", JSON.stringify(target.file));
+    formData.append("table", JSON.stringify(target.table));
+
+    console.log(formData);
+
+    const tables = await createTable(formData);
 
     if (!tables) {
       console.log("Не удалось получить таблицу");
@@ -155,6 +171,7 @@ const Create: FC<ICreate> = () => {
       lessonsPerWeek: "",
       table: "",
       stage: "",
+      hoursPerWeekmax: "",
     });
 
     setLoading(false);
@@ -167,15 +184,12 @@ const Create: FC<ICreate> = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(user, formasd);
-
     const auth = !!user.token;
 
     if (auth) {
       setLoading(false);
       return;
     }
-
 
     router.push("/");
     setLoading(false);
@@ -205,7 +219,19 @@ const Create: FC<ICreate> = () => {
                 hoursPerWeek: collectNumbers(e.target.value),
               });
             }}
-            placeholder="Количество часов (в неделю)"
+            placeholder="Количество часов (в неделю, минимальное)"
+          />
+
+          <DefaultInput
+            required
+            value={form.hoursPerWeekmax}
+            onChange={(e) => {
+              setForm({
+                ...form,
+                hoursPerWeekmax: collectNumbers(e.target.value),
+              });
+            }}
+            placeholder="Количество часов (в неделю, максимальное)"
           />
 
           <DefaultInput
@@ -352,7 +378,7 @@ const Create: FC<ICreate> = () => {
 
           <div className={classes.wrapper_button}>
             <DomiantButton onClick={submitHandler} type="submit">
-              Отправить
+              Скачать
             </DomiantButton>
           </div>
         </form>
